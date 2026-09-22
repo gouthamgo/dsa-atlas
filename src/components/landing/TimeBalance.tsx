@@ -16,7 +16,7 @@ export function TimeBalance() {
       {columns.map((col) => {
         const total = col.blocks.reduce((a, b) => a + b, 0);
         return (
-          <div key={col.label} className="flex-1">
+          <div key={col.label} className="w-full max-w-[130px]">
             <div className="flex h-[150px] flex-col justify-end gap-1">
               {col.blocks.map((minutes, i) => (
                 <div

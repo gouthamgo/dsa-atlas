@@ -3,7 +3,7 @@
 A dated plan for data structures and algorithms, not another topic list.
 
 Pick a start date and a length — 90, 120 or 180 days — and get a day-by-day
-schedule: what to solve today, what comes back for revision, and whether you are
+schedule over 322 problems: what to solve today, what comes back for revision, and whether you are
 ahead or behind. Progress lives in your browser; there is no account and no server.
 
 ## How it differs from a tracker
@@ -13,6 +13,8 @@ ahead or behind. Progress lives in your browser; there is no account and no serv
   hard DP is not five hours while a day of easy arrays is forty minutes.
 - **Every seventh day is revision.** Problems you rated shaky come back after
   3, 7 or 21 days, capped so revision never buries new work.
+- **A map, not a list.** Twenty-one techniques drawn as a dependency graph: solve
+  one problem in a pattern and everything built on it opens up.
 - **Patterns first.** Each pattern page gives the tell, the invariant and one
   worked example — the three things that make a problem recognisable.
 
