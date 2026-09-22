@@ -3,8 +3,23 @@ import { ALL_PROBLEMS } from "@/data/problems";
 import { PATTERN_PREREQS, TOPIC_ORDER } from "@/data/types";
 
 describe("dataset", () => {
-  it("has at least 60 problems", () => {
-    expect(ALL_PROBLEMS.length).toBeGreaterThanOrEqual(60);
+  it("covers the whole curriculum", () => {
+    expect(ALL_PROBLEMS.length).toBeGreaterThanOrEqual(300);
+  });
+
+  it("gives every topic real coverage", () => {
+    for (const topic of TOPIC_ORDER) {
+      const count = ALL_PROBLEMS.filter((p) => p.topic === topic).length;
+      expect({ topic, count }).toMatchObject({ topic });
+      expect(count).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it("gives every pattern at least one problem", () => {
+    for (const pattern of Object.keys(PATTERN_PREREQS)) {
+      const count = ALL_PROBLEMS.filter((p) => p.pattern === pattern).length;
+      expect(count).toBeGreaterThan(0);
+    }
   });
 
   it("has unique ids", () => {

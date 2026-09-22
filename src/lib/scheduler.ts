@@ -40,8 +40,16 @@ function orderPatterns(): PatternId[] {
 export function sortProblems(problems: Problem[]): Problem[] {
   const patternRank = new Map(orderPatterns().map((p, i) => [p, i] as const));
   const topicRank = new Map(TOPIC_ORDER.map((t, i) => [t, i] as const));
+
+  /**
+   * A problem can need a technique that ranks later than its own pattern — a heap
+   * problem over a sliding window, say. It waits for the latest thing it needs.
+   */
+  const effectiveRank = (p: Problem) =>
+    Math.max(patternRank.get(p.pattern)!, ...p.prereqs.map((r) => patternRank.get(r)!));
+
   return [...problems].sort((a, b) => {
-    const byPattern = patternRank.get(a.pattern)! - patternRank.get(b.pattern)!;
+    const byPattern = effectiveRank(a) - effectiveRank(b);
     if (byPattern !== 0) return byPattern;
     const byTopic = topicRank.get(a.topic)! - topicRank.get(b.topic)!;
     if (byTopic !== 0) return byTopic;
