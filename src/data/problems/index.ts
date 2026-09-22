@@ -1,5 +1,6 @@
 import type { Problem } from "@/data/types";
 import { arrays } from "./arrays";
+import { strings } from "./strings";
 import { hashing } from "./hashing";
 import { twoPointers } from "./two-pointers";
 import { slidingWindow } from "./sliding-window";
@@ -11,10 +12,12 @@ import { heaps } from "./heaps";
 import { backtracking } from "./backtracking";
 import { graphs } from "./graphs";
 import { greedy } from "./greedy";
+import { bitManipulation } from "./bit-manipulation";
 import { dynamicProgramming } from "./dynamic-programming";
 
 export const ALL_PROBLEMS: Problem[] = [
   ...arrays,
+  ...strings,
   ...hashing,
   ...twoPointers,
   ...slidingWindow,
@@ -26,5 +29,6 @@ export const ALL_PROBLEMS: Problem[] = [
   ...backtracking,
   ...graphs,
   ...greedy,
+  ...bitManipulation,
   ...dynamicProgramming,
 ];

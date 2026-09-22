@@ -23,6 +23,35 @@ for (const p of prices) {
     },
     complexity: "O(n) time, O(1) space.",
   },
+  "string-building": {
+    tell: "You are assembling or parsing a string character by character, and naive concatenation would be O(n²).",
+    invariant: "The buffer holds exactly the output for the input you have consumed; you never re-read what you wrote.",
+    example: {
+      title: "Reverse words in a string",
+      code: `const out = [];
+let i = s.length - 1;
+while (i >= 0) {
+  while (i >= 0 && s[i] === " ") i--;
+  if (i < 0) break;
+  let j = i;
+  while (i >= 0 && s[i] !== " ") i--;
+  out.push(s.slice(i + 1, j + 1));
+}
+return out.join(" ");`,
+    },
+    complexity: "O(n) time. Build into an array and join once — string += in a loop is O(n²).",
+  },
+  "bit-tricks": {
+    tell: "Pairs that cancel, counting set bits, powers of two, or 'do it without + and -'.",
+    invariant: "XOR cancels equal values and keeps the odd one out; n & (n-1) clears the lowest set bit.",
+    example: {
+      title: "Single number",
+      code: `let x = 0;
+for (const n of nums) x ^= n;
+return x;   // every pair cancels, the loner survives`,
+    },
+    complexity: "O(n) time, O(1) space — and no extra data structure at all.",
+  },
   "hash-map": {
     tell: "You need to ask 'have I seen this before?' or 'how many of these are there?' in O(1).",
     invariant: "The map always describes exactly the part of the input you have already scanned.",

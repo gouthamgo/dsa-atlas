@@ -2,6 +2,7 @@ export type Difficulty = "easy" | "medium" | "hard";
 
 export const TOPIC_ORDER = [
   "arrays",
+  "strings",
   "hashing",
   "two-pointers",
   "sliding-window",
@@ -13,6 +14,7 @@ export const TOPIC_ORDER = [
   "backtracking",
   "graphs",
   "greedy",
+  "bit-manipulation",
   "dynamic-programming",
 ] as const;
 
@@ -20,6 +22,7 @@ export type TopicId = (typeof TOPIC_ORDER)[number];
 
 export const TOPIC_LABELS: Record<TopicId, string> = {
   arrays: "Arrays",
+  strings: "Strings",
   hashing: "Hashing",
   "two-pointers": "Two Pointers",
   "sliding-window": "Sliding Window",
@@ -31,6 +34,7 @@ export const TOPIC_LABELS: Record<TopicId, string> = {
   backtracking: "Backtracking",
   graphs: "Graphs",
   greedy: "Greedy",
+  "bit-manipulation": "Bit Manipulation",
   "dynamic-programming": "Dynamic Programming",
 };
 
@@ -40,6 +44,8 @@ export const TOPIC_LABELS: Record<TopicId, string> = {
  */
 export const PATTERN_PREREQS = {
   "array-traversal": [],
+  "string-building": ["array-traversal"],
+  "bit-tricks": [],
   "hash-map": ["array-traversal"],
   "prefix-sum": ["array-traversal"],
   "two-pointers": ["array-traversal"],
@@ -66,6 +72,8 @@ export type PatternId = keyof typeof PATTERN_PREREQS;
 
 export const PATTERN_LABELS: Record<PatternId, string> = {
   "array-traversal": "Array Traversal",
+  "string-building": "String Building",
+  "bit-tricks": "Bit Tricks",
   "hash-map": "Hash Map",
   "prefix-sum": "Prefix Sum",
   "two-pointers": "Two Pointers",
