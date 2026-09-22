@@ -37,7 +37,7 @@ export default function MapPage() {
   const pad = 40;
 
   return (
-    <AppShell>
+    <AppShell rail={false}>
       <div className="space-y-6">
         <header>
           <h1 className="font-display text-3xl font-bold">The map</h1>
@@ -62,7 +62,8 @@ export default function MapPage() {
         <div className="overflow-x-auto rounded-xl border border-[var(--line)] bg-[var(--surface)]">
           <svg
             viewBox={`${-pad} ${-pad} ${width + pad * 2} ${height + pad * 2}`}
-            className="h-auto w-full min-w-[820px]"
+            className="h-auto w-full"
+            preserveAspectRatio="xMinYMid meet"
             role="img"
             aria-label="Map of patterns and their prerequisites"
           >
@@ -75,7 +76,7 @@ export default function MapPage() {
               return (
                 <path
                   key={`${from}-${to}`}
-                  d={`M ${a.x + 62} ${a.y} C ${midX} ${a.y}, ${midX} ${b.y}, ${b.x - 62} ${b.y}`}
+                  d={`M ${a.x + 66} ${a.y} C ${midX} ${a.y}, ${midX} ${b.y}, ${b.x - 66} ${b.y}`}
                   fill="none"
                   stroke={lit ? "var(--mint)" : "var(--line)"}
                   strokeWidth={lit ? 2 : 1.25}
@@ -101,10 +102,10 @@ export default function MapPage() {
                   className="cursor-pointer outline-none"
                 >
                   <rect
-                    x={-62}
-                    y={-24}
-                    width={124}
-                    height={48}
+                    x={-66}
+                    y={-22}
+                    width={132}
+                    height={44}
                     rx={10}
                     fill={style.fill}
                     stroke={isHover ? "var(--mint)" : style.stroke}
@@ -119,8 +120,8 @@ export default function MapPage() {
                     fontWeight={600}
                     style={{ pointerEvents: "none" }}
                   >
-                    {PATTERN_LABELS[n.id].length > 18
-                      ? PATTERN_LABELS[n.id].slice(0, 17) + "…"
+                    {PATTERN_LABELS[n.id].length > 20
+                      ? PATTERN_LABELS[n.id].slice(0, 19) + "…"
                       : PATTERN_LABELS[n.id]}
                   </text>
                   <text

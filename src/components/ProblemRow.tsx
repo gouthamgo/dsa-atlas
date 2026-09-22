@@ -12,7 +12,8 @@ const DIFFICULTY_COLOR = {
   hard: "var(--rose)",
 } as const;
 
-export function ProblemRow({ problem, showPattern = true }: { problem: Problem; showPattern?: boolean }) {
+/** Columns here must match the header row in ProblemTable. */
+export function ProblemRow({ problem }: { problem: Problem }) {
   const status = useProgress((s) => s.problems[problem.id]?.status ?? "todo");
   const notes = useProgress((s) => s.problems[problem.id]?.notes);
   const solve = useProgress((s) => s.solve);
@@ -32,7 +33,7 @@ export function ProblemRow({ problem, showPattern = true }: { problem: Problem; 
 
   return (
     <li
-      className={`flex items-center gap-3 rounded-lg border-b border-[var(--line)] px-2 py-3 transition-colors last:border-b-0 hover:bg-[var(--surface)] ${
+      className={`flex items-center gap-3 border-b border-[var(--line)] px-3 py-2.5 transition-colors last:border-b-0 hover:bg-[var(--surface)] ${
         justSolved ? "animate-[solved_0.7s_ease-out]" : ""
       }`}
     >
@@ -46,7 +47,8 @@ export function ProblemRow({ problem, showPattern = true }: { problem: Problem; 
 
       <span
         aria-hidden
-        className="h-8 w-[3px] shrink-0 rounded-full"
+        title={problem.difficulty}
+        className="h-7 w-[3px] shrink-0 rounded-full"
         style={{ background: DIFFICULTY_COLOR[problem.difficulty] }}
       />
 
@@ -57,24 +59,31 @@ export function ProblemRow({ problem, showPattern = true }: { problem: Problem; 
         >
           {problem.title}
         </Link>
-        <div className="mt-0.5 flex items-center gap-2 text-xs text-[var(--muted)]">
+        <div className="flex gap-2 text-xs text-[var(--muted)] sm:hidden">
+          <span>{PATTERN_LABELS[problem.pattern]}</span>
           <span>{problem.minutes} min</span>
-          {showPattern && (
-            <Link href={`/patterns/${problem.pattern}`} className="hover:text-[var(--ink)]">
-              {PATTERN_LABELS[problem.pattern]}
-            </Link>
-          )}
-          {notes ? <span title="You have notes on this one">notes</span> : null}
+          {notes && <span>notes</span>}
         </div>
       </div>
+
+      <Link
+        href={`/patterns/${problem.pattern}`}
+        className="hidden w-28 shrink-0 truncate text-xs text-[var(--muted)] hover:text-[var(--ink)] sm:block"
+      >
+        {PATTERN_LABELS[problem.pattern]}
+      </Link>
+
+      <span className="hidden w-14 shrink-0 text-right text-xs text-[var(--muted)] tabular-nums sm:block">
+        {problem.minutes}m
+      </span>
 
       <a
         href={problem.url}
         target="_blank"
         rel="noreferrer noopener"
-        className="shrink-0 rounded-md border border-[var(--line)] px-2.5 py-1 text-xs text-[var(--muted)] transition-colors hover:border-[var(--mint)] hover:text-[var(--ink)]"
+        className="w-16 shrink-0 rounded-md border border-[var(--line)] py-1 text-center text-xs text-[var(--muted)] transition-colors hover:border-[var(--mint)] hover:text-[var(--ink)]"
       >
-        Open
+        Solve
       </a>
     </li>
   );

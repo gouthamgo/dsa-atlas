@@ -26,8 +26,8 @@ function depthOf(id: PatternId, memo = new Map<PatternId, number>()): number {
   return d;
 }
 
-export const COLUMN_WIDTH = 200;
-export const ROW_HEIGHT = 92;
+export const COLUMN_WIDTH = 190;
+export const ROW_HEIGHT = 74;
 
 export function buildGraph(progress: Record<string, ProblemProgress>): {
   nodes: GraphNode[];

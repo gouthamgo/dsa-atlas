@@ -158,13 +158,13 @@ function SectionHead({ title, meta, note }: { title: string; meta?: string; note
 export function ProblemTable({ children }: { children: React.ReactNode }) {
   return (
     <div className="overflow-hidden rounded-xl border border-[var(--line)]">
-      <div className="flex items-center gap-3 border-b border-[var(--line)] bg-[var(--surface)] px-2 py-2 text-xs text-[var(--muted)]">
-        <span className="w-5 shrink-0" />
+      <div className="hidden items-center gap-3 border-b border-[var(--line)] bg-[var(--surface)] px-3 py-2 text-xs text-[var(--muted)] sm:flex">
+        <span className="w-5 shrink-0">Done</span>
         <span className="w-[3px] shrink-0" />
         <span className="flex-1">Problem</span>
-        <span className="hidden w-24 shrink-0 sm:block">Pattern</span>
+        <span className="w-28 shrink-0">Pattern</span>
         <span className="w-14 shrink-0 text-right">Time</span>
-        <span className="w-16 shrink-0 text-right">Link</span>
+        <span className="w-16 shrink-0 text-center">LeetCode</span>
       </div>
       <ul>{children}</ul>
     </div>

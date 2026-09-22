@@ -15,7 +15,7 @@ import { ProgressRing } from "@/components/ProgressRing";
  * Three zones, the layout every DSA tool converges on: where you are (left),
  * what you are doing (middle), how you are going (right).
  */
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children, rail = true }: { children: React.ReactNode; rail?: boolean }) {
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
 
@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const due = ready ? dueProblems(progress, iso) : [];
 
   return (
-    <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)_240px]">
+    <div className={`mx-auto grid w-full max-w-[1400px] gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)] ${rail ? "xl:grid-cols-[220px_minmax(0,1fr)_240px]" : ""}`}>
       <aside className="hidden lg:block">
         <nav className="sticky top-20 space-y-8">
           <div>
@@ -99,6 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="min-w-0">{children}</div>
 
+      {rail && (
       <aside className="hidden xl:block">
         <div className="sticky top-20 space-y-6">
           <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-4">
@@ -156,6 +157,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </aside>
+      )}
     </div>
   );
 }
