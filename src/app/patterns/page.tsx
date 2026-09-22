@@ -8,7 +8,7 @@ export default function PatternsPage() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl font-bold">Patterns</h1>
+      <h1 className="font-display text-3xl font-semibold">Patterns</h1>
       <p className="mt-1 max-w-[60ch] text-sm text-[var(--muted)]">
         Interviews reward recognition, not recall. Each page gives you the tell, the invariant and one
         worked example.

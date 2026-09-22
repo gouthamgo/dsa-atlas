@@ -10,7 +10,7 @@ import { buildGraph, type NodeState } from "@/lib/patternGraph";
 import { AppShell } from "@/components/AppShell";
 
 const STATE_STYLE: Record<NodeState, { fill: string; stroke: string; text: string }> = {
-  mastered: { fill: "var(--mint)", stroke: "var(--mint)", text: "#06202a" },
+  mastered: { fill: "var(--mint)", stroke: "var(--mint)", text: "var(--on-accent)" },
   started: { fill: "color-mix(in srgb, var(--mint) 22%, transparent)", stroke: "var(--mint)", text: "var(--ink)" },
   available: { fill: "var(--surface-2)", stroke: "var(--line)", text: "var(--ink)" },
   locked: { fill: "transparent", stroke: "var(--line)", text: "var(--muted)" },
@@ -40,7 +40,7 @@ export default function MapPage() {
     <AppShell>
       <div className="space-y-6">
         <header>
-          <h1 className="font-display text-3xl font-bold">The map</h1>
+          <h1 className="font-display text-3xl font-semibold">The map</h1>
           <p className="mt-2 max-w-[62ch] text-[var(--muted)]">
             Every technique and what it is built on. Solve one problem in a pattern and the
             patterns that depend on it open up. This is the order the plan follows.
@@ -127,7 +127,7 @@ export default function MapPage() {
                   <text
                     textAnchor="middle"
                     y={13}
-                    fill={n.state === "mastered" ? "#06202a" : "var(--muted)"}
+                    fill={n.state === "mastered" ? "var(--on-accent)" : "var(--muted)"}
                     fontSize={10}
                     style={{ pointerEvents: "none" }}
                   >

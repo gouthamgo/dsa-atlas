@@ -46,7 +46,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
         <Link href={`/topics/${problem.topic}`} className="text-sm text-[var(--muted)] hover:text-[var(--ink)]">
           {TOPIC_LABELS[problem.topic]}
         </Link>
-        <h1 className="mt-1 font-display text-3xl font-bold">{problem.title}</h1>
+        <h1 className="mt-1 font-display text-3xl font-semibold">{problem.title}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[var(--muted)]">
           <span>{problem.difficulty}</span>
           <span>{problem.minutes} min</span>
@@ -70,7 +70,7 @@ export function ProblemDetail({ problem }: { problem: Problem }) {
           className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
           style={{
             background: solved ? "var(--surface-2)" : "var(--mint)",
-            color: solved ? "var(--ink)" : "#06202a",
+            color: solved ? "var(--ink)" : "var(--on-accent)",
           }}
         >
           {solved ? "Solved — undo" : "Mark solved"}

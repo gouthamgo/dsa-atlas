@@ -20,7 +20,7 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
   return (
     <article className="max-w-[68ch] space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold">{PATTERN_LABELS[id]}</h1>
+        <h1 className="font-display text-3xl font-semibold">{PATTERN_LABELS[id]}</h1>
         {prereqs.length > 0 && (
           <p className="mt-2 text-sm text-[var(--muted)]">
             Learn{" "}

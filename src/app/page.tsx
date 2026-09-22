@@ -37,7 +37,7 @@ export default function LandingPage() {
       <section className="pt-6">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <h1 className="max-w-[16ch] font-display text-[clamp(2.75rem,8vw,5rem)] leading-[0.92] font-extrabold">
+            <h1 className="max-w-[16ch] font-display text-[clamp(2.75rem,8vw,5rem)] leading-[0.92] font-semibold">
               Stop deciding what to solve today.
             </h1>
             <p className="mt-5 max-w-[54ch] text-lg text-[var(--muted)]">
@@ -52,7 +52,7 @@ export default function LandingPage() {
               [TOPIC_ORDER.length, "topics"],
             ].map(([n, label]) => (
               <div key={label as string} className="bg-[var(--bg)] px-5 py-3">
-                <dt className="font-display text-2xl font-extrabold tabular-nums">{n}</dt>
+                <dt className="font-display text-2xl font-semibold tabular-nums">{n}</dt>
                 <dd className="text-xs text-[var(--muted)]">{label}</dd>
               </div>
             ))}
@@ -66,7 +66,7 @@ export default function LandingPage() {
               onClick={() => start(l.value)}
               className="group rounded-xl border border-[var(--line)] bg-[var(--surface)] px-5 py-3 text-left transition-all hover:-translate-y-0.5 hover:border-[var(--mint)]"
             >
-              <span className="font-display text-xl font-extrabold">{l.value} days</span>
+              <span className="font-display text-xl font-semibold">{l.value} days</span>
               <span className="ml-3 text-sm text-[var(--muted)]">{l.perDay}</span>
               <span className="mt-0.5 block text-xs text-[var(--muted)]">{l.hint}</span>
             </button>
@@ -167,7 +167,7 @@ export default function LandingPage() {
         <button
           onClick={() => start(90)}
           className="mt-8 rounded-lg px-5 py-2.5 font-medium transition-transform hover:-translate-y-0.5"
-          style={{ background: "var(--mint)", color: "#06202a" }}
+          style={{ background: "var(--mint)", color: "var(--on-accent)" }}
         >
           Start day 1 today
         </button>

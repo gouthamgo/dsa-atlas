@@ -8,6 +8,7 @@ import { dueProblems } from "@/lib/review";
 import { ALL_PROBLEMS } from "@/data/problems";
 import { PATTERN_LABELS, TOPIC_LABELS } from "@/data/types";
 import { dayTitle, dayReason, dayPattern, dayTopic } from "@/lib/planMeta";
+import { LESSONS } from "@/data/lessons";
 import { AppShell } from "@/components/AppShell";
 import { ProblemRow } from "@/components/ProblemRow";
 
@@ -68,13 +69,21 @@ export default function TodayPage() {
               )}
             </div>
 
-            <h1 className="mt-1 font-display text-4xl font-extrabold">{dayTitle(today)}</h1>
+            <h1 className="mt-1 font-display text-4xl font-semibold">{dayTitle(today)}</h1>
 
             <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-[var(--muted)]">
               {dayReason(today, previous)}
             </p>
 
-            {pattern && !today.isRest && (
+            {topic && LESSONS[topic] && !today.isRest ? (
+              <Link
+                href={`/topics/${topic}`}
+                className="mt-4 inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium"
+                style={{ background: "var(--mint)", color: "var(--on-accent)" }}
+              >
+                Learn {TOPIC_LABELS[topic]} first
+              </Link>
+            ) : pattern && !today.isRest && (
               <Link
                 href={`/patterns/${pattern}`}
                 className="mt-3 inline-block rounded-lg border border-[var(--line)] px-3 py-1.5 text-sm transition-colors hover:border-[var(--mint)]"

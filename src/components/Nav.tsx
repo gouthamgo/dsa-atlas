@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const LINKS = [
   { href: "/today", label: "Today" },
   { href: "/plan", label: "Plan" },
-  { href: "/patterns", label: "Patterns" },
+  { href: "/learn", label: "Learn" },
 ];
 
 export function Nav() {
@@ -15,12 +15,15 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-20 border-b border-[var(--line)] bg-[var(--bg)]/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-3xl items-center gap-6 px-4 py-3 sm:px-6">
-        <Link href="/" className="font-display text-lg font-extrabold tracking-tight">
+        <Link href="/" className="font-display text-lg font-semibold tracking-tight">
           Atlas
         </Link>
         <nav className="flex flex-1 items-center gap-1">
           {LINKS.map((link) => {
-            const active = pathname === link.href || pathname.startsWith(link.href + "/");
+            const active =
+              pathname === link.href ||
+              pathname.startsWith(link.href + "/") ||
+              (link.href === "/learn" && /^\/(topics|patterns|map)/.test(pathname));
             return (
               <Link
                 key={link.href}

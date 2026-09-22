@@ -66,7 +66,7 @@ export default function PlanPage() {
   return (
     <AppShell>
       <header>
-        <h1 className="font-display text-3xl font-bold">Your plan</h1>
+        <h1 className="font-display text-3xl font-semibold">Your plan</h1>
         <p className="mt-2 text-[var(--muted)]">
           {view.totalCount} problems over {settings.days} days, in the order the techniques build on
           each other. Every seventh day is revision.
@@ -83,7 +83,7 @@ export default function PlanPage() {
               aria-pressed={settings.days === d}
               className={`rounded-full px-3 py-1 text-sm transition-colors ${
                 settings.days === d
-                  ? "bg-[var(--mint)] text-[#06202a]"
+                  ? "bg-[var(--mint)] text-[var(--on-accent)]"
                   : "text-[var(--muted)] hover:text-[var(--ink)]"
               }`}
             >

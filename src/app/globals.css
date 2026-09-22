@@ -1,16 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a1620;
-  --surface: #10222d;
-  --surface-2: #16303e;
-  --line: #21414f;
-  --ink: #e6edef;
-  --muted: #7c97a3;
-  --mint: #3dd6c0;
-  --sand: #e8b04b;
-  --rose: #e86a6a;
-  --rest: #2a4150;
+  /* Linear, via Refero Styles: near-black canvas, hairlines, one lime accent. */
+  --bg: #08090a;
+  --surface: #0f1011;
+  --surface-2: #161718;
+  --line: #23252a;
+  --line-strong: #383b3f;
+  --ink: #f7f8f8;
+  --soft: #d0d6e0;
+  --muted: #8a8f98;
+  --faint: #62666d;
+  --mint: #e4f222;
+  --on-accent: #08090a;
+  --sand: #f2c94c;
+  --rose: #eb5757;
+  --easy: #27a644;
+  --medium: #f2c94c;
+  --hard: #eb5757;
+  --info: #6366f1;
+  --rest: #23252a;
 }
 
 :root[data-theme="light"] {
@@ -36,8 +45,9 @@
   --color-mint: var(--mint);
   --color-sand: var(--sand);
   --color-rose: var(--rose);
-  --font-display: var(--font-bricolage);
-  --font-sans: var(--font-plex);
+  --font-display: var(--font-inter);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jbmono);
 }
 
 html {
@@ -53,7 +63,8 @@ html:has(:root[data-theme="light"]) {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.011em;
   font-feature-settings: "tnum" 1;
   -webkit-font-smoothing: antialiased;
 }
@@ -61,8 +72,8 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.022em;
 }
 
 :focus-visible {

@@ -7,9 +7,9 @@ import { PATTERN_LABELS } from "@/data/types";
 import { useProgress } from "@/lib/store";
 
 const DIFFICULTY_COLOR = {
-  easy: "var(--mint)",
-  medium: "var(--sand)",
-  hard: "var(--rose)",
+  easy: "var(--easy)",
+  medium: "var(--medium)",
+  hard: "var(--hard)",
 } as const;
 
 /** Columns here must match the header row in ProblemTable. */
