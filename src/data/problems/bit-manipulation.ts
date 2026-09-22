@@ -11,6 +11,7 @@ export const bitManipulation = [
   p("reverse-bits", "Reverse Bits", "bit-tricks", "easy", 25, []),
   p("missing-number", "Missing Number", "bit-tricks", "easy", 20, []),
   p("sum-of-two-integers", "Sum of Two Integers", "bit-tricks", "medium", 40, []),
+  p("number-of-steps-to-reduce-a-number-to-zero", "Number of Steps to Reduce a Number to Zero", "bit-tricks", "easy", 15, []),
   p("power-of-two", "Power of Two", "bit-tricks", "easy", 15, []),
   p("power-of-four", "Power of Four", "bit-tricks", "easy", 15, []),
   p("bitwise-and-of-numbers-range", "Bitwise AND of Numbers Range", "bit-tricks", "medium", 35, []),
