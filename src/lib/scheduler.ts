@@ -48,9 +48,15 @@ export function sortProblems(problems: Problem[]): Problem[] {
   const effectiveRank = (p: Problem) =>
     Math.max(patternRank.get(p.pattern)!, ...p.prereqs.map((r) => patternRank.get(r)!));
 
+  /** 0 if the problem teaches the technique it waits for, 1 if it only depends on it. */
+  const dependsOnly = (p: Problem) => (patternRank.get(p.pattern)! === effectiveRank(p) ? 0 : 1);
+
   return [...problems].sort((a, b) => {
     const byPattern = effectiveRank(a) - effectiveRank(b);
     if (byPattern !== 0) return byPattern;
+    // At a tie, the problems that introduce a technique go before the ones that lean on it.
+    const byRole = dependsOnly(a) - dependsOnly(b);
+    if (byRole !== 0) return byRole;
     const byTopic = topicRank.get(a.topic)! - topicRank.get(b.topic)!;
     if (byTopic !== 0) return byTopic;
     const byDifficulty = DIFFICULTY_RANK[a.difficulty] - DIFFICULTY_RANK[b.difficulty];

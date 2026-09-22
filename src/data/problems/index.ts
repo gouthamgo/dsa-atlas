@@ -1,34 +1,43 @@
 import type { Problem } from "@/data/types";
-import { arrays } from "./arrays";
-import { strings } from "./strings";
-import { hashing } from "./hashing";
 import { twoPointers } from "./two-pointers";
-import { slidingWindow } from "./sliding-window";
-import { stacks } from "./stacks";
-import { binarySearch } from "./binary-search";
+import { hashMaps } from "./hash-maps";
 import { linkedLists } from "./linked-lists";
-import { trees } from "./trees";
+import { fastSlowPointers } from "./fast-slow-pointers";
+import { slidingWindows } from "./sliding-windows";
+import { binarySearch } from "./binary-search";
+import { stacks } from "./stacks";
 import { heaps } from "./heaps";
-import { backtracking } from "./backtracking";
+import { intervals } from "./intervals";
+import { prefixSums } from "./prefix-sums";
+import { trees } from "./trees";
+import { tries } from "./tries";
 import { graphs } from "./graphs";
-import { greedy } from "./greedy";
-import { bitManipulation } from "./bit-manipulation";
+import { backtracking } from "./backtracking";
 import { dynamicProgramming } from "./dynamic-programming";
+import { greedy } from "./greedy";
+import { sortAndSearch } from "./sort-and-search";
+import { bitManipulation } from "./bit-manipulation";
+import { mathAndGeometry } from "./math-and-geometry";
 
+/** In the order of the book's chapters. */
 export const ALL_PROBLEMS: Problem[] = [
-  ...arrays,
-  ...strings,
-  ...hashing,
   ...twoPointers,
-  ...slidingWindow,
-  ...stacks,
-  ...binarySearch,
+  ...hashMaps,
   ...linkedLists,
-  ...trees,
+  ...fastSlowPointers,
+  ...slidingWindows,
+  ...binarySearch,
+  ...stacks,
   ...heaps,
-  ...backtracking,
+  ...intervals,
+  ...prefixSums,
+  ...trees,
+  ...tries,
   ...graphs,
-  ...greedy,
-  ...bitManipulation,
+  ...backtracking,
   ...dynamicProgramming,
+  ...greedy,
+  ...sortAndSearch,
+  ...bitManipulation,
+  ...mathAndGeometry,
 ];

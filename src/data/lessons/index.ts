@@ -1,13 +1,14 @@
-import type { TopicId } from "@/data/types";
-import type { Lesson } from "./types";
-import { arraysLesson } from "./arrays";
+import type { Lesson, LessonId } from "./types";
+import { foundationsLesson } from "./foundations";
 import { twoPointersLesson } from "./two-pointers";
-import { slidingWindowLesson } from "./sliding-window";
+import { slidingWindowsLesson } from "./sliding-windows";
 
-export const LESSONS: Partial<Record<TopicId, Lesson>> = {
-  arrays: arraysLesson,
+export const LESSONS: Partial<Record<LessonId, Lesson>> = {
+  foundations: foundationsLesson,
   "two-pointers": twoPointersLesson,
-  "sliding-window": slidingWindowLesson,
+  "sliding-windows": slidingWindowsLesson,
 };
 
-export type { Lesson, Frame } from "./types";
+export const FOUNDATIONS_TITLE = "Foundations: arrays and cost";
+
+export type { Lesson, LessonId, Frame } from "./types";

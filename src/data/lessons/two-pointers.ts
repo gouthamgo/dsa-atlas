@@ -89,7 +89,18 @@ export const twoPointersLesson: Lesson = {
   },
   code: {
     title: "Two Sum II, the template",
-    source: `vector<int> twoSum(vector<int>& a, int target) {
+    python: `def two_sum(a: list[int], target: int) -> list[int]:
+    l, r = 0, len(a) - 1
+    while l < r:
+        total = a[l] + a[r]
+        if total == target:
+            return [l + 1, r + 1]
+        if total < target:
+            l += 1      # need bigger: left moves up
+        else:
+            r -= 1      # need smaller: right moves down
+    return []`,
+    cpp: `vector<int> twoSum(vector<int>& a, int target) {
     int l = 0, r = a.size() - 1;
     while (l < r) {
         int sum = a[l] + a[r];

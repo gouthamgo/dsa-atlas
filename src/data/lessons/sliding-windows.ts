@@ -2,8 +2,8 @@ import type { Lesson } from "./types";
 
 const s = ["a", "b", "c", "a", "b", "c", "b", "b"];
 
-export const slidingWindowLesson: Lesson = {
-  topic: "sliding-window",
+export const slidingWindowsLesson: Lesson = {
+  topic: "sliding-windows",
   subtitle: "A range that grows at the front and shrinks at the back, never moving backwards.",
   whyInterviewer:
     "\"Longest\", \"shortest\", \"at most k\", \"contiguous\" — those words mean sliding window. Interviewers use it to check you can turn an O(n²) scan of every substring into one O(n) pass.",
@@ -113,7 +113,16 @@ export const slidingWindowLesson: Lesson = {
   },
   code: {
     title: "Longest substring without repeats",
-    source: `int lengthOfLongestSubstring(string s) {
+    python: `def length_of_longest_substring(s: str) -> int:
+    last = {}                       # where each char was last seen
+    best = left = 0
+    for right, c in enumerate(s):
+        if last.get(c, -1) >= left:  # repeat inside the window?
+            left = last[c] + 1       # tail jumps past it
+        last[c] = right
+        best = max(best, right - left + 1)
+    return best`,
+    cpp: `int lengthOfLongestSubstring(string s) {
     vector<int> last(128, -1);           // where each char was last seen
     int best = 0, left = 0;
     for (int right = 0; right < s.size(); right++) {

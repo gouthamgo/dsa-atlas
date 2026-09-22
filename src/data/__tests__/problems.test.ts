@@ -4,14 +4,14 @@ import { PATTERN_PREREQS, TOPIC_ORDER } from "@/data/types";
 
 describe("dataset", () => {
   it("covers the whole curriculum", () => {
-    expect(ALL_PROBLEMS.length).toBeGreaterThanOrEqual(300);
+    expect(ALL_PROBLEMS.length).toBeGreaterThanOrEqual(380);
   });
 
   it("gives every topic real coverage", () => {
     for (const topic of TOPIC_ORDER) {
       const count = ALL_PROBLEMS.filter((p) => p.topic === topic).length;
       expect({ topic, count }).toMatchObject({ topic });
-      expect(count).toBeGreaterThanOrEqual(10);
+      expect(count).toBeGreaterThanOrEqual(7);
     }
   });
 

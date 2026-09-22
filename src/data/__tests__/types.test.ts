@@ -2,9 +2,12 @@ import { describe, it, expect } from "vitest";
 import { TOPIC_ORDER, TOPIC_LABELS, PATTERN_PREREQS, PATTERN_LABELS } from "@/data/types";
 
 describe("curriculum ordering", () => {
-  it("starts with arrays and ends with dynamic programming", () => {
-    expect(TOPIC_ORDER[0]).toBe("arrays");
-    expect(TOPIC_ORDER[TOPIC_ORDER.length - 1]).toBe("dynamic-programming");
+  it("follows the book's 19 chapters in order", () => {
+    expect(TOPIC_ORDER).toHaveLength(19);
+    expect(TOPIC_ORDER[0]).toBe("two-pointers");
+    expect(TOPIC_ORDER[4]).toBe("sliding-windows");
+    expect(TOPIC_ORDER[14]).toBe("dynamic-programming");
+    expect(TOPIC_ORDER[TOPIC_ORDER.length - 1]).toBe("math-and-geometry");
   });
 
   it("declares no pattern as its own prerequisite", () => {

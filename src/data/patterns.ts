@@ -52,6 +52,47 @@ return x;   // every pair cancels, the loner survives`,
     },
     complexity: "O(n) time, O(1) space — and no extra data structure at all.",
   },
+  math: {
+    tell: "Digits, primes, remainders, overflow, or a grid you walk by coordinates rather than by value.",
+    invariant: "Work on the number's structure — digit by digit or index by index — and check for overflow before it happens, not after.",
+    example: {
+      title: "Reverse a 32-bit integer",
+      code: `let out = 0;
+while (x !== 0) {
+  const d = x % 10;
+  x = Math.trunc(x / 10);
+  if (out > 214748364 || out < -214748364) return 0;  // would overflow
+  out = out * 10 + d;
+}
+return out;`,
+    },
+    complexity: "O(number of digits) — log₁₀ n.",
+  },
+  sorting: {
+    tell: "The order of the input is the obstacle: 'kth largest', 'merge', 'arrange so that', or anything easier once equal things sit together.",
+    invariant: "After sorting, everything you need to compare is adjacent, so one linear pass finishes the job.",
+    example: {
+      title: "Dutch national flag (three-way partition)",
+      code: `let lo = 0, mid = 0, hi = nums.length - 1;
+while (mid <= hi) {
+  if (nums[mid] === 0) [nums[lo++], nums[mid++]] = [nums[mid], nums[lo]];
+  else if (nums[mid] === 2) [nums[mid], nums[hi--]] = [nums[hi], nums[mid]];
+  else mid++;
+}`,
+    },
+    complexity: "Comparison sorts are O(n log n); partition-style passes are O(n).",
+  },
+  trie: {
+    tell: "Many words and questions about prefixes: autocomplete, 'starts with', or searching a dictionary letter by letter.",
+    invariant: "Each node is a prefix; walking down one letter at a time never revisits a character of the word.",
+    example: {
+      title: "Insert and search",
+      code: `const root = {};
+const insert = (w) => { let n = root; for (const c of w) n = n[c] ??= {}; n.end = true; };
+const search = (w) => { let n = root; for (const c of w) if (!(n = n[c])) return false; return !!n.end; };`,
+    },
+    complexity: "O(length of the word) per insert or lookup, independent of how many words are stored.",
+  },
   "hash-map": {
     tell: "You need to ask 'have I seen this before?' or 'how many of these are there?' in O(1).",
     invariant: "The map always describes exactly the part of the input you have already scanned.",

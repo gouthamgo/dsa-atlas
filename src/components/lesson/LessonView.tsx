@@ -1,6 +1,8 @@
 import type { Lesson } from "@/data/lessons";
 import { TOPIC_LABELS, TOPIC_ORDER } from "@/data/types";
 import { StepFigure } from "./StepFigure";
+import { CodeTabs } from "./CodeTabs";
+import { FOUNDATIONS_TITLE } from "@/data/lessons";
 
 /** Renders **phrase** as a highlighted span; everything else is plain text. */
 function Highlighted({ text }: { text: string }) {
@@ -53,15 +55,19 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
 }
 
 export function LessonView({ lesson, problemCount }: { lesson: Lesson; problemCount: number }) {
-  const position = TOPIC_ORDER.indexOf(lesson.topic) + 1;
+  const isPrelude = lesson.topic === "foundations";
+  const position = isPrelude ? 0 : TOPIC_ORDER.indexOf(lesson.topic as (typeof TOPIC_ORDER)[number]) + 1;
+  const title = isPrelude ? FOUNDATIONS_TITLE : TOPIC_LABELS[lesson.topic as keyof typeof TOPIC_LABELS];
 
   return (
     <article className="space-y-12">
       <header className="space-y-3">
         <p className="font-mono text-xs tracking-wider text-[var(--faint)]">
-          LESSON {position} OF {TOPIC_ORDER.length} · {problemCount} PROBLEMS
+          {isPrelude
+            ? "BEFORE CHAPTER 1"
+            : `CHAPTER ${position} OF ${TOPIC_ORDER.length} · ${problemCount} PROBLEMS`}
         </p>
-        <h1 className="text-4xl font-semibold text-[var(--ink)]">{TOPIC_LABELS[lesson.topic]}</h1>
+        <h1 className="text-4xl font-semibold text-[var(--ink)]">{title}</h1>
         <p className="max-w-[62ch] text-lg text-[var(--muted)]">{lesson.subtitle}</p>
       </header>
 
@@ -85,9 +91,7 @@ export function LessonView({ lesson, problemCount }: { lesson: Lesson; problemCo
       </Step>
 
       <Step n={3} title={lesson.code.title}>
-        <pre className="overflow-x-auto rounded-xl border border-[var(--line)] bg-[var(--surface)] p-4 font-mono text-[13px] leading-relaxed text-[var(--soft)]">
-          <code>{lesson.code.source}</code>
-        </pre>
+        <CodeTabs python={lesson.code.python} cpp={lesson.code.cpp} />
       </Step>
 
       <Step n={4} title="What it costs">

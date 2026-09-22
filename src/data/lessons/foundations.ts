@@ -1,7 +1,7 @@
 import type { Lesson } from "./types";
 
-export const arraysLesson: Lesson = {
-  topic: "arrays",
+export const foundationsLesson: Lesson = {
+  topic: "foundations",
   subtitle: "Why reading any element is instant, and why inserting one is not.",
   whyInterviewer:
     "Half of all interview problems are arrays in disguise. Being able to say why reading is O(1) and a middle insert is O(n) is how you justify every complexity claim you make later.",
@@ -64,7 +64,13 @@ export const arraysLesson: Lesson = {
   },
   code: {
     title: "One pass, one running value",
-    source: `int maxProfit(vector<int>& prices) {
+    python: `def max_profit(prices: list[int]) -> int:
+    best, lowest = 0, float("inf")
+    for p in prices:
+        lowest = min(lowest, p)          # cheapest day so far
+        best = max(best, p - lowest)     # what if I sold today?
+    return best`,
+    cpp: `int maxProfit(vector<int>& prices) {
     int best = 0, lowest = INT_MAX;
     for (int p : prices) {
         lowest = min(lowest, p);         // cheapest day so far

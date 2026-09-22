@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TOPIC_ORDER, TOPIC_LABELS } from "@/data/types";
 import { ALL_PROBLEMS } from "@/data/problems";
-import { LESSONS } from "@/data/lessons";
+import { LESSONS, FOUNDATIONS_TITLE } from "@/data/lessons";
 import { useProgress } from "@/lib/store";
 
 export default function LearnPage() {
@@ -16,15 +16,31 @@ export default function LearnPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <p className="font-mono text-xs tracking-wider text-[var(--faint)]">
-        {TOPIC_ORDER.length} LESSONS · {written} WRITTEN
+        {TOPIC_ORDER.length} CHAPTERS · {written} WRITTEN · SAME ORDER AS CODING INTERVIEW PATTERNS
       </p>
       <h1 className="mt-2 text-4xl font-semibold">Learn</h1>
       <p className="mt-3 max-w-[60ch] text-lg text-[var(--muted)]">
-        One topic at a time, in the order they build on each other. Each lesson explains the idea,
-        lets you step through it, then hands you the problems.
+        Nineteen patterns, in the order they build on each other — the same chapters as the book.
+        Each lesson explains the idea, lets you step through it, then hands you the problems.
       </p>
 
-      <ol className="mt-10 overflow-hidden rounded-xl border border-[var(--line)]">
+      <Link
+        href="/topics/foundations"
+        className="mt-10 flex items-center gap-4 rounded-xl border border-[var(--line)] px-4 py-4 transition-colors hover:bg-[var(--surface)]"
+      >
+        <span className="w-7 font-mono text-xs text-[var(--faint)]">00</span>
+        <span className="flex-1">
+          <span className="block text-[15px] font-medium text-[var(--ink)]">{FOUNDATIONS_TITLE}</span>
+          <span className="block text-sm text-[var(--muted)]">
+            {LESSONS.foundations?.subtitle}
+          </span>
+        </span>
+        <span className="rounded-full border border-[var(--line)] px-2 py-0.5 font-mono text-[10px] text-[var(--mint)]">
+          START HERE
+        </span>
+      </Link>
+
+      <ol className="mt-3 overflow-hidden rounded-xl border border-[var(--line)]">
         {TOPIC_ORDER.map((topic, i) => {
           const problems = ALL_PROBLEMS.filter((p) => p.topic === topic);
           const done = ready ? problems.filter((p) => progress[p.id]?.status === "solved").length : 0;

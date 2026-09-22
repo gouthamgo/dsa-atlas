@@ -17,15 +17,18 @@ export type Frame = {
   caption: string;
 };
 
+/** "foundations" is the prelude before chapter 1; every other lesson is a chapter. */
+export type LessonId = TopicId | "foundations";
+
 export type Lesson = {
-  topic: TopicId;
+  topic: LessonId;
   /** One line under the title: what this is, in plain words. */
   subtitle: string;
   whyInterviewer: string;
   /** The analogy. Wrap key phrases in **double asterisks** to highlight them. */
   idea: string;
   figure: { title: string; frames: Frame[] };
-  code: { title: string; source: string };
+  code: { title: string; python: string; cpp: string };
   costs: { op: string; cost: string; note: string }[];
   traps: string[];
 };
