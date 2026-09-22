@@ -1,149 +1,147 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useSchedule, todayISO } from "@/lib/useSchedule";
-import { useProgress } from "@/lib/store";
-import { dueProblems } from "@/lib/review";
+import { useRouter } from "next/navigation";
+import { HeroComb } from "@/components/HeroComb";
 import { ALL_PROBLEMS } from "@/data/problems";
-import { DayComb } from "@/components/DayComb";
-import { ProblemRow } from "@/components/ProblemRow";
+import { PATTERN_LABELS, PATTERN_PREREQS, TOPIC_ORDER, type PatternId } from "@/data/types";
+import { PATTERN_GUIDES } from "@/data/patterns";
+import { useProgress, type PlanLength } from "@/lib/store";
 
-export default function TodayPage() {
-  // The schedule depends on stored settings, so render it after hydration.
-  const [ready, setReady] = useState(false);
-  useEffect(() => setReady(true), []);
+const LENGTHS: { value: PlanLength; perDay: string; hint: string }[] = [
+  { value: 90, perDay: "about 2 hours a day", hint: "studying full time" },
+  { value: 120, perDay: "about 90 minutes a day", hint: "working full time" },
+  { value: 180, perDay: "about an hour a day", hint: "no rush, more revision" },
+];
 
-  const view = useSchedule();
-  const progress = useProgress((s) => s.problems);
-  const settings = useProgress((s) => s.settings);
-  const iso = todayISO();
+export default function LandingPage() {
+  const router = useRouter();
+  const setDays = useProgress((s) => s.setDays);
+  const setStartDate = useProgress((s) => s.setStartDate);
+  const patterns = Object.keys(PATTERN_PREREQS) as PatternId[];
 
-  if (!ready) return <div className="h-64" aria-hidden />;
-
-  const due = dueProblems(progress, iso).map((id) => ALL_PROBLEMS.find((p) => p.id === id)!).filter(Boolean);
-  const dayNumber = view.today ? view.today.index + 1 : null;
-  const upcoming = view.schedule.filter((d) => d.date > iso).slice(0, 6);
-  const solvedToday = view.today?.problems.filter((p) => progress[p.id]?.status === "solved").length ?? 0;
+  function start(days: PlanLength) {
+    setDays(days);
+    setStartDate(new Date().toISOString().slice(0, 10));
+    router.push("/today");
+  }
 
   return (
-    <div className="space-y-10">
-      <section>
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h1 className="font-display text-[clamp(2.5rem,8vw,4.5rem)] leading-[0.9] font-extrabold">
-              {dayNumber ? `Day ${dayNumber}` : "Not started"}
-            </h1>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              {dayNumber
-                ? `of ${settings.days} · ${view.solvedCount} of ${view.totalCount} problems solved`
-                : `Your plan starts ${settings.startDate}`}
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="font-display text-3xl font-bold">{view.streak}</div>
-            <div className="text-xs text-[var(--muted)]">day streak</div>
-          </div>
-        </div>
+    <div className="space-y-24 pb-16">
+      <section className="pt-8">
+        <p className="text-sm text-[var(--muted)]">
+          {ALL_PROBLEMS.length} problems · {patterns.length} patterns · {TOPIC_ORDER.length} topics
+        </p>
+        <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(2.75rem,8vw,5.5rem)] leading-[0.92] font-extrabold">
+          Stop deciding what to solve today.
+        </h1>
+        <p className="mt-5 max-w-[52ch] text-lg text-[var(--muted)]">
+          Every other tracker hands you a few hundred problems and wishes you luck. Atlas hands you
+          a dated plan: today&apos;s problems, sized to the hours you actually have, in the order
+          the techniques build on each other.
+        </p>
 
-        <div className="mt-6">
-          <DayComb schedule={view.schedule} progress={progress} todayISO={iso} />
-        </div>
-
-        {view.behindBy > 0 && (
-          <p className="mt-4 text-sm text-[var(--sand)]">
-            {view.behindBy} problem{view.behindBy === 1 ? "" : "s"} from earlier days still open.{" "}
-            <Link href="/plan" className="underline underline-offset-4">
-              Catch up
-            </Link>
-          </p>
-        )}
-      </section>
-
-      {due.length > 0 && (
-        <section>
-          <h2 className="font-display text-xl font-bold">Revise first</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            You rated these ones shaky. Redo them before today&apos;s work.
-          </p>
-          <ul className="mt-3">
-            {due.map((p) => (
-              <ProblemRow key={p.id} problem={p} />
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <section>
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-xl font-bold">
-            {view.today?.isRest ? "Revision day" : "Today"}
-          </h2>
-          {view.today && !view.today.isRest && (
-            <span className="text-sm text-[var(--muted)]">
-              {solvedToday}/{view.today.problems.length} · {view.today.totalMinutes} min
-            </span>
-          )}
-        </div>
-
-        {!view.today && (
+        <div className="mt-10">
+          <HeroComb />
           <p className="mt-3 text-sm text-[var(--muted)]">
-            Today falls outside your plan. Set a start date in{" "}
-            <Link href="/settings" className="underline underline-offset-4">
-              settings
-            </Link>
-            .
+            Ninety days. The short bars are revision days — every seventh one, on purpose.
           </p>
-        )}
+        </div>
 
-        {view.today?.isRest && (
-          <p className="mt-3 text-sm text-[var(--muted)]">
-            No new problems today. Redo anything above, or read a{" "}
-            <Link href="/patterns" className="underline underline-offset-4">
-              pattern
-            </Link>
-            .
-          </p>
-        )}
-
-        {view.today && !view.today.isRest && (
-          <ul className="mt-3">
-            {view.today.problems.map((p) => (
-              <ProblemRow key={p.id} problem={p} />
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {upcoming.length > 0 && (
-        <section>
-          <h2 className="font-display text-xl font-bold">Coming up</h2>
-          <ol className="mt-3">
-            {upcoming.map((day) => (
-              <li
-                key={day.index}
-                className="flex items-baseline gap-4 border-b border-[var(--line)] py-2.5 last:border-b-0"
+        <div className="mt-10">
+          <h2 className="font-display text-lg font-bold">How long do you have?</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {LENGTHS.map((l) => (
+              <button
+                key={l.value}
+                onClick={() => start(l.value)}
+                className="group rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5 text-left transition-all hover:-translate-y-0.5 hover:border-[var(--mint)]"
               >
-                <span className="w-10 shrink-0 text-sm text-[var(--muted)]">
-                  {day.index + 1}
-                </span>
-                <span className="flex-1 truncate text-sm text-[var(--muted)]">
-                  {day.isRest ? "Revision" : day.problems.map((p) => p.title).join(", ")}
-                </span>
-                <span className="shrink-0 text-xs text-[var(--muted)]">
-                  {day.isRest ? "—" : `${day.totalMinutes} min`}
-                </span>
-              </li>
+                <div className="font-display text-3xl font-extrabold">{l.value}</div>
+                <div className="text-sm">days</div>
+                <div className="mt-3 text-sm text-[var(--muted)]">{l.perDay}</div>
+                <div className="text-xs text-[var(--muted)]">{l.hint}</div>
+                <div className="mt-4 text-sm text-[var(--mint)] opacity-0 transition-opacity group-hover:opacity-100">
+                  Start today
+                </div>
+              </button>
             ))}
-          </ol>
-          <Link
-            href="/plan"
-            className="mt-3 inline-block text-sm text-[var(--muted)] underline underline-offset-4 hover:text-[var(--ink)]"
-          >
-            See the whole plan
+          </div>
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            You can change this later without losing a thing.{" "}
+            <Link href="/today" className="underline underline-offset-4 hover:text-[var(--ink)]">
+              Or just look around
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="font-display text-2xl font-bold">What the plan actually does</h2>
+        <div className="mt-6 grid gap-8 sm:grid-cols-3">
+          <Explainer
+            title="Teaches before it tests"
+            body="Sliding window never appears before two pointers. The scheduler walks a dependency graph of techniques, so nothing lands before you have the tool for it."
+          />
+          <Explainer
+            title="Measures days in minutes"
+            body="Five easy array problems and two hard DP problems are both one evening. Days are balanced by expected solve time, not by problem count."
+          />
+          <Explainer
+            title="Brings back what you fumbled"
+            body="Rate a problem again, hard or good. It returns in 3, 7 or 21 days, capped at five a day so revision never eats the plan."
+          />
+        </div>
+      </section>
+
+      <section>
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="font-display text-2xl font-bold">Learn the tell, not the answer</h2>
+          <Link href="/patterns" className="text-sm text-[var(--muted)] underline underline-offset-4 hover:text-[var(--ink)]">
+            All {patterns.length} patterns
           </Link>
-        </section>
-      )}
+        </div>
+        <p className="mt-2 max-w-[60ch] text-[var(--muted)]">
+          Interviews reward recognition. Each pattern page gives you the signal in the problem
+          statement, the invariant that makes it work, and one worked example.
+        </p>
+        <ul className="mt-6 grid gap-px overflow-hidden rounded-xl bg-[var(--line)] sm:grid-cols-2">
+          {patterns.slice(0, 6).map((p) => (
+            <li key={p} className="bg-[var(--bg)]">
+              <Link href={`/patterns/${p}`} className="block p-5 transition-colors hover:bg-[var(--surface)]">
+                <div className="font-display font-bold">{PATTERN_LABELS[p]}</div>
+                <p className="mt-1 text-sm text-[var(--muted)]">{PATTERN_GUIDES[p].tell}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-8">
+        <h2 className="max-w-[24ch] font-display text-2xl font-bold">
+          Your progress stays in your browser.
+        </h2>
+        <p className="mt-3 max-w-[56ch] text-[var(--muted)]">
+          No account, no email, no server storing what you have solved. Export a file when you want
+          it on another machine. That is the whole privacy policy.
+        </p>
+        <button
+          onClick={() => start(90)}
+          className="mt-6 rounded-lg px-5 py-2.5 font-medium transition-transform hover:-translate-y-0.5"
+          style={{ background: "var(--mint)", color: "#06202a" }}
+        >
+          Start day 1 today
+        </button>
+      </section>
+    </div>
+  );
+}
+
+function Explainer({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="border-t border-[var(--line)] pt-4">
+      <h3 className="font-display text-lg font-bold">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">{body}</p>
     </div>
   );
 }

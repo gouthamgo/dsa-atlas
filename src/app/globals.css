@@ -79,3 +79,12 @@ h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+@keyframes solved {
+  0% {
+    background: color-mix(in srgb, var(--mint) 22%, transparent);
+  }
+  100% {
+    background: transparent;
+  }
+}
