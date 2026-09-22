@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DSA Atlas
 
-## Getting Started
+A dated plan for data structures and algorithms, not another topic list.
 
-First, run the development server:
+Pick a start date and a length — 90, 120 or 180 days — and get a day-by-day
+schedule: what to solve today, what comes back for revision, and whether you are
+ahead or behind. Progress lives in your browser; there is no account and no server.
+
+## How it differs from a tracker
+
+- **Days, not topics.** The scheduler orders problems so a technique is always
+  taught before it is needed, then balances each day by *minutes*, so a day of
+  hard DP is not five hours while a day of easy arrays is forty minutes.
+- **Every seventh day is revision.** Problems you rated shaky come back after
+  3, 7 or 21 days, capped so revision never buries new work.
+- **Patterns first.** Each pattern page gives the tell, the invariant and one
+  worked example — the three things that make a problem recognisable.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm test        # scheduler, review and storage logic
+npm run build   # static export to out/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How it is built
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js 15 (static export), TypeScript, Tailwind, Zustand. The schedule is a pure
+function of the dataset and your settings, derived on every render and never
+stored — which is why changing plan length can't corrupt your progress. Progress
+is keyed by problem id in localStorage, with JSON export and import to move
+between devices.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/data/` — the curriculum: problems, topics, patterns
+- `src/lib/scheduler.ts` — builds the dated plan
+- `src/lib/review.ts` — spaced revision
+- `src/lib/store.ts` — persisted progress
+- `docs/superpowers/` — the design spec and implementation plan
