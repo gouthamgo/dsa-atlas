@@ -37,7 +37,7 @@ export default function MapPage() {
   const pad = 40;
 
   return (
-    <AppShell rail={false}>
+    <AppShell>
       <div className="space-y-6">
         <header>
           <h1 className="font-display text-3xl font-bold">The map</h1>

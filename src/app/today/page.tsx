@@ -10,7 +10,6 @@ import { PATTERN_LABELS, TOPIC_LABELS } from "@/data/types";
 import { dayTitle, dayReason, dayPattern, dayTopic } from "@/lib/planMeta";
 import { AppShell } from "@/components/AppShell";
 import { ProblemRow } from "@/components/ProblemRow";
-import { SearchProblems } from "@/components/SearchProblems";
 
 export default function TodayPage() {
   const [ready, setReady] = useState(false);
@@ -41,9 +40,9 @@ export default function TodayPage() {
         <section className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-6">
           <h1 className="font-display text-2xl font-bold">Today is outside your plan</h1>
           <p className="mt-2 text-[var(--muted)]">
-            Your plan runs {settings.days} days from {settings.startDate}. Change the start date in{" "}
-            <Link href="/settings" className="underline underline-offset-4">
-              settings
+            Your plan runs {settings.days} days from {settings.startDate}. Change the start date on{" "}
+            <Link href="/plan" className="underline underline-offset-4">
+              the plan
             </Link>{" "}
             to begin today.
           </p>
@@ -132,10 +131,6 @@ export default function TodayPage() {
             )}
           </section>
 
-          <section>
-            <SectionHead title="Find any problem" />
-            <SearchProblems />
-          </section>
         </div>
       )}
     </AppShell>
