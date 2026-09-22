@@ -6,11 +6,13 @@ import { useSchedule, todayISO } from "@/lib/useSchedule";
 import { useProgress } from "@/lib/store";
 import { dueProblems } from "@/lib/review";
 import { ALL_PROBLEMS } from "@/data/problems";
-import { DayComb } from "@/components/DayComb";
+import { PATTERN_LABELS, TOPIC_LABELS } from "@/data/types";
+import { dayTitle, dayReason, dayPattern, dayTopic } from "@/lib/planMeta";
+import { AppShell } from "@/components/AppShell";
 import { ProblemRow } from "@/components/ProblemRow";
+import { SearchProblems } from "@/components/SearchProblems";
 
 export default function TodayPage() {
-  // The schedule depends on stored settings, so render it after hydration.
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
 
@@ -19,131 +21,152 @@ export default function TodayPage() {
   const settings = useProgress((s) => s.settings);
   const iso = todayISO();
 
-  if (!ready) return <div className="h-64" aria-hidden />;
+  const today = view.today;
+  const previous = today ? view.schedule[today.index - 1] : undefined;
+  const due = ready
+    ? dueProblems(progress, iso)
+        .map((id) => ALL_PROBLEMS.find((p) => p.id === id))
+        .filter((p): p is NonNullable<typeof p> => Boolean(p))
+    : [];
 
-  const due = dueProblems(progress, iso).map((id) => ALL_PROBLEMS.find((p) => p.id === id)!).filter(Boolean);
-  const dayNumber = view.today ? view.today.index + 1 : null;
-  const upcoming = view.schedule.filter((d) => d.date > iso).slice(0, 6);
-  const solvedToday = view.today?.problems.filter((p) => progress[p.id]?.status === "solved").length ?? 0;
+  const solvedToday = today?.problems.filter((p) => progress[p.id]?.status === "solved").length ?? 0;
+  const pattern = today ? dayPattern(today) : null;
+  const topic = today ? dayTopic(today) : null;
 
   return (
-    <div className="space-y-10">
-      <section>
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <h1 className="font-display text-[clamp(2.5rem,8vw,4.5rem)] leading-[0.9] font-extrabold">
-              {dayNumber ? `Day ${dayNumber}` : "Not started"}
-            </h1>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              {dayNumber
-                ? `of ${settings.days} · ${view.solvedCount} of ${view.totalCount} problems solved`
-                : `Your plan starts ${settings.startDate}`}
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="font-display text-3xl font-bold">{view.streak}</div>
-            <div className="text-xs text-[var(--muted)]">day streak</div>
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <DayComb schedule={view.schedule} progress={progress} todayISO={iso} />
-        </div>
-
-        {view.behindBy > 0 && (
-          <p className="mt-4 text-sm text-[var(--sand)]">
-            {view.behindBy} problem{view.behindBy === 1 ? "" : "s"} from earlier days still open.{" "}
-            <Link href="/plan" className="underline underline-offset-4">
-              Catch up
-            </Link>
-          </p>
-        )}
-      </section>
-
-      {due.length > 0 && (
-        <section>
-          <h2 className="font-display text-xl font-bold">Revise first</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            You rated these ones shaky. Redo them before today&apos;s work.
-          </p>
-          <ul className="mt-3">
-            {due.map((p) => (
-              <ProblemRow key={p.id} problem={p} />
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <section>
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-xl font-bold">
-            {view.today?.isRest ? "Revision day" : "Today"}
-          </h2>
-          {view.today && !view.today.isRest && (
-            <span className="text-sm text-[var(--muted)]">
-              {solvedToday}/{view.today.problems.length} · {view.today.totalMinutes} min
-            </span>
-          )}
-        </div>
-
-        {!view.today && (
-          <p className="mt-3 text-sm text-[var(--muted)]">
-            Today falls outside your plan. Set a start date in{" "}
+    <AppShell>
+      {!ready ? (
+        <div className="h-96" aria-hidden />
+      ) : !today ? (
+        <section className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-6">
+          <h1 className="font-display text-2xl font-bold">Today is outside your plan</h1>
+          <p className="mt-2 text-[var(--muted)]">
+            Your plan runs {settings.days} days from {settings.startDate}. Change the start date in{" "}
             <Link href="/settings" className="underline underline-offset-4">
               settings
-            </Link>
-            .
+            </Link>{" "}
+            to begin today.
           </p>
-        )}
-
-        {view.today?.isRest && (
-          <p className="mt-3 text-sm text-[var(--muted)]">
-            No new problems today. Redo anything above, or read a{" "}
-            <Link href="/patterns" className="underline underline-offset-4">
-              pattern
-            </Link>
-            .
-          </p>
-        )}
-
-        {view.today && !view.today.isRest && (
-          <ul className="mt-3">
-            {view.today.problems.map((p) => (
-              <ProblemRow key={p.id} problem={p} />
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {upcoming.length > 0 && (
-        <section>
-          <h2 className="font-display text-xl font-bold">Coming up</h2>
-          <ol className="mt-3">
-            {upcoming.map((day) => (
-              <li
-                key={day.index}
-                className="flex items-baseline gap-4 border-b border-[var(--line)] py-2.5 last:border-b-0"
-              >
-                <span className="w-10 shrink-0 text-sm text-[var(--muted)]">
-                  {day.index + 1}
-                </span>
-                <span className="flex-1 truncate text-sm text-[var(--muted)]">
-                  {day.isRest ? "Revision" : day.problems.map((p) => p.title).join(", ")}
-                </span>
-                <span className="shrink-0 text-xs text-[var(--muted)]">
-                  {day.isRest ? "—" : `${day.totalMinutes} min`}
-                </span>
-              </li>
-            ))}
-          </ol>
-          <Link
-            href="/plan"
-            className="mt-3 inline-block text-sm text-[var(--muted)] underline underline-offset-4 hover:text-[var(--ink)]"
-          >
-            See the whole plan
-          </Link>
         </section>
+      ) : (
+        <div className="space-y-10">
+          <header>
+            <div className="flex flex-wrap items-baseline gap-x-3 text-sm text-[var(--muted)]">
+              <span>
+                Week {Math.floor(today.index / 7) + 1}, day {(today.index % 7) + 1}
+              </span>
+              <span>·</span>
+              <span>
+                Day {today.index + 1} of {settings.days}
+              </span>
+              {topic && (
+                <>
+                  <span>·</span>
+                  <Link href={`/topics/${topic}`} className="hover:text-[var(--ink)]">
+                    {TOPIC_LABELS[topic]}
+                  </Link>
+                </>
+              )}
+            </div>
+
+            <h1 className="mt-1 font-display text-4xl font-extrabold">{dayTitle(today)}</h1>
+
+            <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-[var(--muted)]">
+              {dayReason(today, previous)}
+            </p>
+
+            {pattern && !today.isRest && (
+              <Link
+                href={`/patterns/${pattern}`}
+                className="mt-3 inline-block rounded-lg border border-[var(--line)] px-3 py-1.5 text-sm transition-colors hover:border-[var(--mint)]"
+              >
+                Read {PATTERN_LABELS[pattern]} first
+              </Link>
+            )}
+          </header>
+
+          {due.length > 0 && (
+            <section>
+              <SectionHead
+                title="Revise first"
+                meta={`${due.length} due`}
+                note="You rated these shaky. Redo them before new work."
+              />
+              <ProblemTable>
+                {due.map((p) => (
+                  <ProblemRow key={p.id} problem={p} />
+                ))}
+              </ProblemTable>
+            </section>
+          )}
+
+          <section>
+            <SectionHead
+              title={today.isRest ? "Nothing new today" : "Solve these"}
+              meta={
+                today.isRest
+                  ? undefined
+                  : `${solvedToday} of ${today.problems.length} done · ${today.totalMinutes} min`
+              }
+              note={
+                today.isRest
+                  ? "Every seventh day is revision. Reread a pattern, redo a problem you rated hard."
+                  : undefined
+              }
+            />
+            {!today.isRest && (
+              <ProblemTable>
+                {today.problems.map((p) => (
+                  <ProblemRow key={p.id} problem={p} />
+                ))}
+              </ProblemTable>
+            )}
+            {solvedToday === today.problems.length && today.problems.length > 0 && (
+              <p className="mt-4 rounded-lg border border-[var(--mint)] px-4 py-3 text-sm">
+                Day {today.index + 1} done. Next up is{" "}
+                <Link href="/plan" className="underline underline-offset-4">
+                  {dayTitle(view.schedule[today.index + 1] ?? today)}
+                </Link>
+                .
+              </p>
+            )}
+          </section>
+
+          <section>
+            <SectionHead title="Find any problem" />
+            <SearchProblems />
+          </section>
+        </div>
       )}
+    </AppShell>
+  );
+}
+
+function SectionHead({ title, meta, note }: { title: string; meta?: string; note?: string }) {
+  return (
+    <div className="mb-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="font-display text-xl font-bold">{title}</h2>
+        {meta && <span className="text-sm text-[var(--muted)] tabular-nums">{meta}</span>}
+      </div>
+      {note && <p className="mt-1 max-w-[62ch] text-sm text-[var(--muted)]">{note}</p>}
+    </div>
+  );
+}
+
+/** Column headers, so a row of text reads as data rather than a list of links. */
+export function ProblemTable({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-[var(--line)]">
+      <div className="flex items-center gap-3 border-b border-[var(--line)] bg-[var(--surface)] px-2 py-2 text-xs text-[var(--muted)]">
+        <span className="w-5 shrink-0" />
+        <span className="w-[3px] shrink-0" />
+        <span className="flex-1">Problem</span>
+        <span className="hidden w-24 shrink-0 sm:block">Pattern</span>
+        <span className="w-14 shrink-0 text-right">Time</span>
+        <span className="w-16 shrink-0 text-right">Link</span>
+      </div>
+      <ul>{children}</ul>
     </div>
   );
 }
