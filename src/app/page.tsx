@@ -1,69 +1,149 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useSchedule, todayISO } from "@/lib/useSchedule";
+import { useProgress } from "@/lib/store";
+import { dueProblems } from "@/lib/review";
+import { ALL_PROBLEMS } from "@/data/problems";
+import { DayComb } from "@/components/DayComb";
+import { ProblemRow } from "@/components/ProblemRow";
+
+export default function TodayPage() {
+  // The schedule depends on stored settings, so render it after hydration.
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
+
+  const view = useSchedule();
+  const progress = useProgress((s) => s.problems);
+  const settings = useProgress((s) => s.settings);
+  const iso = todayISO();
+
+  if (!ready) return <div className="h-64" aria-hidden />;
+
+  const due = dueProblems(progress, iso).map((id) => ALL_PROBLEMS.find((p) => p.id === id)!).filter(Boolean);
+  const dayNumber = view.today ? view.today.index + 1 : null;
+  const upcoming = view.schedule.filter((d) => d.date > iso).slice(0, 6);
+  const solvedToday = view.today?.problems.filter((p) => progress[p.id]?.status === "solved").length ?? 0;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="space-y-10">
+      <section>
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <h1 className="font-display text-[clamp(2.5rem,8vw,4.5rem)] leading-[0.9] font-extrabold">
+              {dayNumber ? `Day ${dayNumber}` : "Not started"}
+            </h1>
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              {dayNumber
+                ? `of ${settings.days} · ${view.solvedCount} of ${view.totalCount} problems solved`
+                : `Your plan starts ${settings.startDate}`}
+            </p>
+          </div>
+          <div className="text-right">
+            <div className="font-display text-3xl font-bold">{view.streak}</div>
+            <div className="text-xs text-[var(--muted)]">day streak</div>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <DayComb schedule={view.schedule} progress={progress} todayISO={iso} />
+        </div>
+
+        {view.behindBy > 0 && (
+          <p className="mt-4 text-sm text-[var(--sand)]">
+            {view.behindBy} problem{view.behindBy === 1 ? "" : "s"} from earlier days still open.{" "}
+            <Link href="/plan" className="underline underline-offset-4">
+              Catch up
+            </Link>
           </p>
+        )}
+      </section>
+
+      {due.length > 0 && (
+        <section>
+          <h2 className="font-display text-xl font-bold">Revise first</h2>
+          <p className="mt-1 text-sm text-[var(--muted)]">
+            You rated these ones shaky. Redo them before today&apos;s work.
+          </p>
+          <ul className="mt-3">
+            {due.map((p) => (
+              <ProblemRow key={p.id} problem={p} />
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section>
+        <div className="flex items-baseline justify-between">
+          <h2 className="font-display text-xl font-bold">
+            {view.today?.isRest ? "Revision day" : "Today"}
+          </h2>
+          {view.today && !view.today.isRest && (
+            <span className="text-sm text-[var(--muted)]">
+              {solvedToday}/{view.today.problems.length} · {view.today.totalMinutes} min
+            </span>
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {!view.today && (
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            Today falls outside your plan. Set a start date in{" "}
+            <Link href="/settings" className="underline underline-offset-4">
+              settings
+            </Link>
+            .
+          </p>
+        )}
+
+        {view.today?.isRest && (
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            No new problems today. Redo anything above, or read a{" "}
+            <Link href="/patterns" className="underline underline-offset-4">
+              pattern
+            </Link>
+            .
+          </p>
+        )}
+
+        {view.today && !view.today.isRest && (
+          <ul className="mt-3">
+            {view.today.problems.map((p) => (
+              <ProblemRow key={p.id} problem={p} />
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {upcoming.length > 0 && (
+        <section>
+          <h2 className="font-display text-xl font-bold">Coming up</h2>
+          <ol className="mt-3">
+            {upcoming.map((day) => (
+              <li
+                key={day.index}
+                className="flex items-baseline gap-4 border-b border-[var(--line)] py-2.5 last:border-b-0"
+              >
+                <span className="w-10 shrink-0 text-sm text-[var(--muted)]">
+                  {day.index + 1}
+                </span>
+                <span className="flex-1 truncate text-sm text-[var(--muted)]">
+                  {day.isRest ? "Revision" : day.problems.map((p) => p.title).join(", ")}
+                </span>
+                <span className="shrink-0 text-xs text-[var(--muted)]">
+                  {day.isRest ? "—" : `${day.totalMinutes} min`}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <Link
+            href="/plan"
+            className="mt-3 inline-block text-sm text-[var(--muted)] underline underline-offset-4 hover:text-[var(--ink)]"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            See the whole plan
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

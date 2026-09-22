@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0a1620;
+  --surface: #10222d;
+  --surface-2: #16303e;
+  --line: #21414f;
+  --ink: #e6edef;
+  --muted: #7c97a3;
+  --mint: #3dd6c0;
+  --sand: #e8b04b;
+  --rose: #e86a6a;
+  --rest: #2a4150;
+}
+
+:root[data-theme="light"] {
+  --bg: #f2f5f4;
+  --surface: #ffffff;
+  --surface-2: #e8eeed;
+  --line: #cdd9d8;
+  --ink: #0a1620;
+  --muted: #5b7380;
+  --mint: #12907e;
+  --sand: #a9711a;
+  --rose: #c04141;
+  --rest: #d5dfde;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-mint: var(--mint);
+  --color-sand: var(--sand);
+  --color-rose: var(--rose);
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-plex);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] html,
+html:has(:root[data-theme="light"]) {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
