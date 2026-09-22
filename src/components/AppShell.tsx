@@ -97,7 +97,27 @@ export function AppShell({ children, rail = true }: { children: React.ReactNode;
         </nav>
       </aside>
 
-      <div className="min-w-0">{children}</div>
+      <div className="min-w-0">
+        {/* On phones the rails are hidden, so progress gets its own compact strip. */}
+        <div className="mb-6 flex items-center gap-4 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-3 xl:hidden">
+          <ProgressRing value={ready ? view.solvedCount : 0} total={view.totalCount} size={44} />
+          <div className="flex-1 text-sm">
+            <div className="font-medium tabular-nums">
+              {ready ? view.solvedCount : 0}/{view.totalCount} solved
+            </div>
+            <div className="text-xs text-[var(--muted)]">
+              {ready ? view.streak : 0} day streak ·{" "}
+              {ready && view.behindBy > 0 ? `${view.behindBy} behind` : "on track"}
+            </div>
+          </div>
+          {due.length > 0 && (
+            <Link href="/today" className="shrink-0 text-xs text-[var(--sand)]">
+              {due.length} to revise
+            </Link>
+          )}
+        </div>
+        {children}
+      </div>
 
       {rail && (
       <aside className="hidden xl:block">
