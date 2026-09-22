@@ -45,7 +45,7 @@ export default function LandingPage() {
               other, sized to the hours you actually have.
             </p>
           </div>
-          <dl className="grid shrink-0 grid-cols-3 gap-px overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--line)] text-center">
+          <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--line)] text-center">
             {[
               [ALL_PROBLEMS.length, "problems"],
               [patterns.length, "patterns"],
@@ -59,7 +59,7 @@ export default function LandingPage() {
           </dl>
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-3">
+        <div className="mt-10 flex min-w-0 flex-wrap items-center gap-3">
           {LENGTHS.map((l) => (
             <button
               key={l.value}
@@ -95,7 +95,7 @@ export default function LandingPage() {
         }
       />
 
-      <section className="grid gap-10 lg:grid-cols-2">
+      <section className="grid min-w-0 gap-10 lg:grid-cols-2">
         <div>
           <Eyebrow>Pattern recognition</Eyebrow>
           <h2 className="mt-2 font-display text-2xl font-bold">
@@ -113,7 +113,7 @@ export default function LandingPage() {
           </Link>
         </div>
 
-        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5">
+        <div className="min-w-0 rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5">
           <div className="flex items-baseline justify-between">
             <h3 className="font-display text-lg font-bold">{PATTERN_LABELS[SHOWCASE]}</h3>
             <span className="text-xs text-[var(--muted)]">
@@ -125,13 +125,13 @@ export default function LandingPage() {
             <Field term="Invariant" desc={guide.invariant} />
             <Field term="Complexity" desc={guide.complexity} />
           </dl>
-          <pre className="mt-4 overflow-x-auto rounded-lg border border-[var(--line)] bg-[var(--bg)] p-3 text-[12px] leading-relaxed">
+          <pre className="mt-4 max-w-full overflow-x-auto rounded-lg border border-[var(--line)] bg-[var(--bg)] p-3 text-[12px] leading-relaxed">
             <code>{guide.example.code}</code>
           </pre>
         </div>
       </section>
 
-      <section className="grid gap-10 lg:grid-cols-2">
+      <section className="grid min-w-0 gap-10 lg:grid-cols-2">
         <div>
           <Eyebrow>Time balance</Eyebrow>
           <h2 className="mt-2 font-display text-2xl font-bold">A day is an evening, not a count</h2>
