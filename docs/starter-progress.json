@@ -13,6 +13,14 @@
       "dueAt": "2026-10-14",
       "minutesTaken": 15,
       "notes": "Halve when even, subtract 1 when odd. O(log n) time, O(1) space. Loop-free: popcount(n) + bit_length(n) - 1."
+    },
+    "subtract-the-product-and-sum-of-digits-of-an-integer": {
+      "status": "solved",
+      "solvedAt": "2026-09-24",
+      "rating": "good",
+      "dueAt": "2026-10-15",
+      "minutesTaken": 10,
+      "notes": "Peel digits with n % 10, drop them with n / 10. Loop runs once per digit, so O(log n), not O(n). Product starts at 1, sum at 0."
     }
   }
 }

@@ -3,6 +3,7 @@ import { mk } from "./helper";
 const p = mk("math-and-geometry");
 
 export const mathAndGeometry = [
+  p("subtract-the-product-and-sum-of-digits-of-an-integer", "Subtract the Product and Sum of Digits of an Integer", "math", "easy", 10, []),
   p("excel-sheet-column-number", "Excel Sheet Column Number", "math", "easy", 20, []),
   p("palindrome-number", "Palindrome Number", "math", "easy", 20, ["array-traversal"]),
   p("pascals-triangle", "Pascal's Triangle", "math", "easy", 20, []),
